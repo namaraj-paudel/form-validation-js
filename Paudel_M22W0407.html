@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Student Info</title>
+    <style type="text/css">
+        #clock {
+            background-color: #000;
+            color: red;
+            font-size: 2em;
+            text-align: center;
+            width: 150px;
+            border-radius: 5px;
+            margin-left: 330px;
+        }
+
+        .container {
+            width: 500px;
+            margin: 0 auto;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+        }
+
+        .form {
+            border-radius: 5px;
+            background-color: #f2f2f2;
+            padding: 2px 20px;
+        }
+
+        h2 {
+            display: block;
+            text-align: center;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 20px;
+            margin-bottom: 5px;
+        }
+
+        input[type=text],
+        input[type=email],
+        input[type=tel],
+        input[type=date],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            resize: vertical;
+        }
+
+        .button {
+            display: flex;
+        }
+
+        input[type="submit"],
+        input[type="button"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        input[type="reset"] {
+            background-color: #F24949;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover,
+        input[type="button"]:hover {
+            background-color: #45a049;
+        }
+
+        input[type="reset"]:hover {
+            background-color: #F23131;
+        }
+
+        input[type="radio"],
+        input[type="checkbox"] {
+            margin-left: 20px;
+        }
+
+        .result {
+            background-color: #FFFFFF;
+            height: 150px;
+            width: 90%;
+            word-wrap: break-word;
+            margin-right: 20px 20px;
+            margin-top: 20px;
+            padding: 20px;
+            box-shadow: 0px 0px 10px 3px #746969;
+        }
+
+        span {
+            color: #F23131;
+            margin-left: 5px;
+            display: none;
+        }
+    </style>
+
+    <script type="text/javascript">
+        "use strict";
+
+        // Start - clock's code
+        function startTime() {
+            let today = new Date();
+            let hour = today.getHours();
+            let minute = today.getMinutes();
+            let second = today.getSeconds();
+            minute = checkTime(minute);
+            second = checkTime(second);
+            document.getElementById('clock').innerHTML =
+                hour + ":" + minute + ":" + second;
+
+            setTimeout(startTime, 1000);
+        }
+        function checkTime(i) {
+            if (i < 10) { i = "0" + i };  // add zero in front of numbers < 10
+            return i;
+        }
+        // End - clock's code
+
+        // Start - form submission
+        function submitForm() {
+            // create a object for form data
+            let formData = {
+                student_id: document.getElementById("id").value,
+                name: document.getElementById("name").value,
+                email: document.getElementById("email").value,
+                phone: document.getElementById("phone").value,
+                dob: document.getElementById("dob").value,
+                gender: document.querySelector('input[name="gender"]:checked').value,
+                address: document.getElementById("address").value,
+                concentration: document.getElementById("concentration").value,
+                subjects: [],
+                message: document.getElementById("message").value
+            };
+
+            // gathers all checked value for subjects
+            const subjects = document.querySelectorAll('input[name="subjects"]:checked');
+
+            // add to array subjects in form data 
+            subjects.forEach(checkbox => {
+                formData.subjects.push(checkbox.value);
+            });
+
+            // validation starts 
+
+            // create a boolean variable to know about all input data are validate or not
+            let is_validate = true
+
+            // student id
+            if (formData.student_id == "") {
+                checkValidation("validate_id", 1);
+                is_validate = false
+            } else {
+                checkValidation("validate_id", 0);
+            }
+
+            // name
+            if (formData.name == "") {
+                checkValidation("validate_name", 1);
+                is_validate = false
+            } else {
+                checkValidation("validate_name", 0);
+            }
+
+            // email
+            if (formData.email == "") {
+                checkValidation("validate_email", 1);
+                is_validate = false
+            } else {
+                checkValidation("validate_email", 0);
+            }
+
+            // check with regex for email
+            let reg_email = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+            if (reg_email.test(formData.email)) {
+                checkValidation("validate_email1", 0);
+            } else {
+                checkValidation("validate_email1", 1);
+                is_validate = false;
+            }
+
+            // phone
+            if (formData.phone == "") {
+                checkValidation("validate_phone", 1);
+                is_validate = false
+            } else {
+                checkValidation("validate_phone", 0);
+            }
+
+            // check with regex for phone
+            let reg_phone = /^(\([0-9]{3}\) |[0-9]{3}-)[0-9]{4}-[0-9]{4}/;
+            if (reg_phone.test(formData.phone)) {
+                checkValidation("validate_phone1", 0);
+            } else {
+                checkValidation("validate_phone1", 1);
+                is_validate = false;
+            }
+
+            // dob
+            if (formData.dob == "") {
+                checkValidation("validate_dob", 1);
+                is_validate = false
+            } else {
+                checkValidation("validate_dob", 0);
+            }
+
+            // gender
+            if (formData.gender == "") {
+                checkValidation("validate_gender", 1);
+                is_validate = false
+            } else {
+                checkValidation("validate_gender", 0);
+            }
+
+            // address
+            if (formData.address == "") {
+                checkValidation("validate_address", 1);
+                is_validate = false
+            } else {
+                checkValidation("validate_address", 0);
+            }
+
+            // concentration
+            if (formData.concentration == "") {
+                checkValidation("validate_concentration", 1);
+                is_validate = false
+            } else {
+                checkValidation("validate_concentration", 0);
+            }
+
+            // message
+            if (formData.message == "") {
+                checkValidation("validate_message", 1);
+                is_validate = false
+            } else {
+                checkValidation("validate_message", 0);
+            }
+
+            // subjects
+            if (formData.subjects == "") {
+                checkValidation("validate_subject", 1);
+                is_validate = false
+            } else {
+                checkValidation("validate_subject", 0);
+            }
+
+
+            // create a fuction to styling the html element after checking the validation
+            function checkValidation(element_id, is_null) {
+                if (is_null == 1) {
+                    document.getElementById(element_id).style.display = "block";
+                }
+                else {
+                    document.getElementById(element_id).style.display = "none";
+                }
+            }
+
+            // if all provided inputs fields are validate then print the result with JSON string.
+            if (is_validate) {
+                const result = document.getElementById("result");
+                result.classList.add("result");
+
+                // reset the form afer submitted successfully
+                document.getElementById("my_form").reset();
+
+                result.innerHTML = JSON.stringify(formData);
+            } else {
+                const result = document.getElementById("result");
+                result.classList.remove("result");
+
+                result.innerHTML = "";
+            }
+
+            // End - form submission
+        }
+    </script>
+
+</head>
+
+<body onload="startTime()">
+    <div class="container">
+        <div id="clock"></div>
+        <h2>Student Information Form</h2>
+        <div class="form">
+            <form id="my_form" onsubmit="event.preventDefault(); submitForm();">
+                <label for="id">Student ID</label>
+                <input type="text" id="id" name="id" placeholder="Enter your student ID.." required>
+                <span id="validate_id">This field is required.</span>
+
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" placeholder="Enter your name.." required>
+                <span id="validate_name">This field is required.</span>
+
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email.." required>
+                <span id="validate_email">This field is required.</span>
+                <span id="validate_email1">Invalid Email. Example: abc@abc.abc</span>
+
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}"
+                    placeholder="000-0000-0000" required>
+                <span id="validate_phone">This field is required.</span>
+                <span id="validate_phone1">Invalid Phone. Example: 000-0000-0000.</span>
+
+                <label for="dob">Date of Birth</label>
+                <input type="date" id="dob" name="dob" placeholder="Place your date of birth.." required>
+                <span id="validate_dob">This field is required.</span>
+
+                <label for="gender">Gender</label>
+                <input type="radio" name="gender" value="Male" checked> Male
+                <input type="radio" name="gender" value="Female"> Female
+                <input type="radio" name="gender" value="Other"> Other
+                <span id="validate_gender">This field is required.</span>
+
+                <label for="address"><b>Address</b></label>
+                <input type="text" id="address" name="address" placeholder="Enter your address" required>
+                <span id="validate_address">This field is required.</span>
+
+                <label for="concentration">Concentration</label>
+                <select id="concentration" name="concentration" required>
+                    <option value="Web System Development">Web System Development</option>
+                    <option value="ERP">ERP</option>
+                    <option value="IT Tourism">IT Tourism</option>
+                    <option value="Global Entrepreneurship">Global Entrepreneurship</option>
+                    <option value="Data Administrator">Data Administrator</option>
+                </select>
+                <span id="validate_concentration">This field is required.</span>
+
+                <label for="subjects">Subjects:</label>
+                <input type="checkbox" id="subjects" name="subjects" value="Project Foundation"> Project Foundation <br>
+                <input type="checkbox" id="subjects" name="subjects" value="Leadership Theory"> Leadership Theory <br>
+                <input type="checkbox" id="subjects" name="subjects" value="Web Programming 1"> Web Programming 1 <br>
+                <input type="checkbox" id="subjects" name="subjects" value="Web Programming 2"> Web Programming 2 <br>
+                <input type="checkbox" id="subjects" name="subjects" value="E-Commerce Methodology"> E-Commerce
+                Methodology <br>
+                <input type="checkbox" id="subjects" name="subjects" value="Advanced Database"> Advanced Database
+                <span id="validate_subject">This field is required.</span>
+
+                <label for="message">Message</label>
+                <textarea id="message" name="message" placeholder="Write a message.." style="height:100px" required></textarea>
+                <span id="validate_message">This field is required.</span>
+
+                <input type="reset" value="Reset">
+                <input type="submit" value="Submit" >
+
+            </form>
+        </div>
+
+        <div id="result">
+            <!-- Code from JavaScript -->
+        </div>
+    </div>
+</body>
+
+</html>
