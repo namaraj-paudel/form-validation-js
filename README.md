@@ -1,2 +1,2 @@
 # form-validation-js
-Validate a form using javascript
+Validate a form using both html and javascript
